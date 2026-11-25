@@ -1,0 +1,29 @@
+[
+  {
+    "id": "q1",
+    "subject": "Pulmonology",
+    "stem": "A 58-year-old man presents with fever, productive cough, and pleuritic chest pain for 2 days. Chest x-ray shows lobar consolidation in the right lower lobe. Which organism is the most likely cause?",
+    "options": ["Streptococcus pneumoniae", "Mycoplasma pneumoniae", "Klebsiella pneumoniae", "Pneumocystis jirovecii", "Legionella pneumophila"],
+    "answer": 0,
+    "explanation": "Lobar consolidation with a sudden onset of fever and productive cough is the classic presentation of pneumococcal pneumonia, the most common cause of community-acquired pneumonia in adults.\n\nMycoplasma causes \"atypical\" pneumonia with patchy interstitial infiltrates. Klebsiella is seen in alcoholics and aspiration. Pneumocystis affects immunocompromised patients.",
+    "objective": "Streptococcus pneumoniae is the most common cause of lobar community-acquired pneumonia."
+  },
+  {
+    "id": "q2",
+    "subject": "Toxicology",
+    "stem": "A 22-year-old woman is brought to the emergency department 6 hours after ingesting a large number of acetaminophen tablets. Which of the following is the most appropriate antidote?",
+    "options": ["Flumazenil", "N-acetylcysteine", "Naloxone", "Atropine", "Fomepizole"],
+    "answer": 1,
+    "explanation": "N-acetylcysteine replenishes glutathione stores and prevents hepatotoxicity from the toxic metabolite NAPQI. It is most effective within 8 hours of ingestion but should be given even if the patient presents later.",
+    "objective": "N-acetylcysteine is the antidote for acetaminophen overdose."
+  },
+  {
+    "id": "q3",
+    "subject": "Hematology",
+    "stem": "A 65-year-old vegan man has fatigue, numbness in both feet, and a macrocytic anemia with hypersegmented neutrophils. Deficiency of which vitamin is most likely?",
+    "options": ["Vitamin B1", "Folate", "Vitamin B12", "Vitamin B6", "Vitamin C"],
+    "answer": 2,
+    "explanation": "Megaloblastic anemia with neurologic findings (paresthesias, loss of vibration sense) points to vitamin B12 deficiency. Folate deficiency causes the same anemia but spares the nervous system.",
+    "objective": "B12 deficiency causes megaloblastic anemia plus neurologic symptoms."
+  }
+]
