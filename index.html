@@ -1,269 +1,336 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QBank Exam Interface</title>
-  <style>
-    :root {
-      --uw-navy: #18365c;
-      --uw-navy-dark: #102540;
-      --uw-blue: #2563eb;
-      --uw-sidebar: #e9eef5;
-      --uw-border: #cbd5e1;
-      --uw-bg: #ffffff;
-      --uw-text: #1e293b;
-      --uw-card: #f8fafc;
-    }
+Choice A
+Choice B
+Choice C
+Choice D
 
-    body.dark-mode {
-      --uw-bg: #121212;
-      --uw-text: #e2e8f0;
-      --uw-card: #1e293b;
-      --uw-sidebar: #1a2230;
-      --uw-border: #334155;
-    }
+Correct Answer
+Choice A
+Choice B
+Choice C
+Choice D
 
-    * { box-sizing: border-box; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; }
-    body { margin: 0; height: 100vh; display: flex; flex-direction: column; background: var(--uw-bg); color: var(--uw-text); overflow: hidden; }
 
-    /* TOP HEADER BAR */
-    .uw-header {
-      background: var(--uw-navy);
-      color: #ffffff;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 16px;
-      border-bottom: 2px solid var(--uw-navy-dark);
-      flex-shrink: 0;
-    }
-    .uw-header-left, .uw-header-center, .uw-header-right { display: flex; align-items: center; gap: 12px; }
-    .item-badge { font-weight: 700; font-size: 15px; background: rgba(255,255,255,0.12); padding: 5px 12px; border-radius: 4px; }
-    .uw-tool-btn {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.3);
-      color: #ffffff;
-      padding: 5px 11px;
-      border-radius: 4px;
-      font-size: 13px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .uw-tool-btn:hover { background: rgba(255,255,255,0.15); }
-    .uw-tool-btn.active { background: #eab308; color: #000; border-color: #eab308; font-weight: 700; }
+Detailed Explanation
+Educational Objective (Summary Box)
+Save Question
+Cancel Edit
+Question Bank (0 Items)
+Publish to GitHub: Click below to copy the updated website code, then paste it into index.html on GitHub.
+📋 Copy Updated Website Code
 
-    /* MAIN WORKSPACE */
-    .uw-workspace { display: flex; flex: 1; overflow: hidden; }
 
-    /* LEFT QUESTION SIDEBAR */
-    .uw-sidebar {
-      width: 56px;
-      background: var(--uw-sidebar);
-      border-right: 1px solid var(--uw-border);
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 6px 0;
-      flex-shrink: 0;
-    }
-    .q-nav-item {
-      width: 44px;
-      height: 32px;
-      margin-bottom: 4px;
-      border: 1px solid var(--uw-border);
-      background: var(--uw-bg);
-      color: var(--uw-text);
-      font-size: 13px;
-      font-weight: 600;
-      border-radius: 3px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-    .q-nav-item.current { border: 2px solid #2563eb; background: #dbeafe; color: #1e3a8a; }
-    .q-nav-item.answered-correct { border-left: 4px solid #16a34a; }
-    .q-nav-item.answered-wrong { border-left: 4px solid #dc2626; }
-    .q-nav-flag { position: absolute; top: 1px; right: 2px; font-size: 9px; color: #eab308; }
 
-    /* MAIN QUESTION PANE */
-    .uw-main { flex: 1; overflow-y: auto; padding: 28px 40px; }
-    .uw-container { max-width: 880px; margin: 0 auto; }
-    .question-stem { font-size: 16.5px; line-height: 1.65; margin-bottom: 24px; white-space: pre-line; }
+Block Time Elapsed: 00:00 | Tutor Mode
+Admin Login
+Reference Laboratory Values
+✕ Close
 
-    /* OPTIONS BOX */
-    .options-box {
-      border: 1px solid var(--uw-border);
-      border-radius: 6px;
-      background: var(--uw-card);
-      padding: 16px;
-      margin-bottom: 20px;
-    }
-    .option-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 12px;
-      border-radius: 4px;
-      margin-bottom: 6px;
-      border: 1px solid transparent;
-      cursor: pointer;
-    }
-    .option-row:hover { background: rgba(37, 99, 235, 0.08); }
-    .option-row.selected { background: #dbeafe; border-color: #3b82f6; color: #1e3a8a; }
-    .option-row.correct { background: #dcfce7; border-color: #16a34a; color: #14532d; font-weight: 600; }
-    .option-row.wrong { background: #fee2e2; border-color: #dc2626; color: #7f1d1d; }
-    .option-left { display: flex; align-items: center; gap: 12px; flex: 1; }
-    .option-text.struck { text-decoration: line-through; opacity: 0.5; }
-    .strike-btn {
-      font-size: 12px;
-      color: #64748b;
-      background: transparent;
-      border: 1px solid var(--uw-border);
-      border-radius: 3px;
-      padding: 2px 7px;
-      cursor: pointer;
-    }
-    .strike-btn:hover { background: #e2e8f0; color: #0f172a; }
+Test
+	Reference Range
+Hemoglobin (Male / Female)
+	13.5–17.5 g/dL / 12.0–16.0 g/dL
+Leukocyte count (WBC)
+	4,500–11,000 /mm³
+Platelet count
+	150,000–400,000 /mm³
+Sodium (Na⁺)
+	136–145 mEq/L
+Potassium (K⁺)
+	3.5–5.0 mEq/L
+Creatinine
+	0.7–1.3 mg/dL
+Glucose (Fasting)
+	70–100 mg/dL
 
-    .submit-btn {
-      background: #1d4ed8;
-      color: #ffffff;
-      border: none;
-      padding: 10px 26px;
-      font-size: 15px;
-      font-weight: 600;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .submit-btn:hover { background: #1e40af; }
+Block Performance Report
+0%
+Restart Block
+Review Items
 
-    /* UWORLD EXPLANATION SECTION */
-    .uw-explanation {
-      margin-top: 28px;
-      border-top: 2px solid var(--uw-border);
-      padding-top: 20px;
-      display: none;
-    }
-    .exp-banner {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 12px 16px;
-      border-radius: 4px;
-      margin-bottom: 18px;
-      font-weight: 700;
-      font-size: 15px;
-    }
-    .exp-banner.correct { background: #dcfce7; color: #14532d; border-left: 5px solid #16a34a; }
-    .exp-banner.wrong { background: #fee2e2; color: #7f1d1d; border-left: 5px solid #dc2626; }
-    .exp-body { font-size: 15.5px; line-height: 1.65; margin-bottom: 20px; }
-    .edu-objective {
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
-      border-left: 5px solid #1d4ed8;
-      padding: 14px 18px;
-      border-radius: 4px;
-      color: #1e3a8a;
-      font-size: 15px;
-      line-height: 1.55;
-    }
 
-    /* BOTTOM FOOTER BAR */
-    .uw-footer {
-      background: var(--uw-navy);
-      color: #ffffff;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 18px;
-      font-size: 13px;
-      flex-shrink: 0;
-    }
-    .admin-link { color: #93c5fd; background: none; border: none; cursor: pointer; text-decoration: underline; font-size: 13px; }
-
-    /* MODALS (LAB VALUES & SCORE REPORT) */
-    .modal-backdrop {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.55);
-      display: none; align-items: center; justify-content: center; z-index: 100;
-    }
-    .modal-box {
-      background: var(--uw-bg); color: var(--uw-text);
-      width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto;
-      border-radius: 6px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    }
-    .lab-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 12px; }
-    .lab-table th, .lab-table td { border: 1px solid var(--uw-border); padding: 8px 10px; text-align: left; }
-    .lab-table th { background: var(--uw-navy); color: #fff; }
-
-    /* ADMIN PANEL OVERLAY */
-    .admin-view { display: none; padding: 24px; overflow-y: auto; flex: 1; background: #f1f5f9; color: #0f172a; }
-    .admin-card { max-width: 820px; margin: 0 auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
-    .form-group { margin-bottom: 12px; }
-    .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 4px; }
-    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 9px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 14px; }
-    .q-list-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; border: 1px solid #e2e8f0; border-radius: 4px; margin-bottom: 8px; gap: 10px; }
-  </style>
-</head>
-<body>
-
-  <!-- TOP UWORLD HEADER -->
-  <header class="uw-header">
-    <div class="uw-header-left">
-      <span class="item-badge" id="item-counter">Item 1 of 3</span>
-      <button class="uw-tool-btn" id="mark-btn" onclick="toggleMark()">🚩 Mark</button>
-    </div>
-    <div class="uw-header-center">
-      <button class="uw-tool-btn" onclick="prevQuestion()">◀ Previous</button>
-      <button class="uw-tool-btn" onclick="nextQuestion()">Next ▶</button>
-    </div>
-    <div class="uw-header-right">
-      <button class="uw-tool-btn" onclick="toggleModal('lab-modal', true)">🧪 Lab Values</button>
-      <button class="uw-tool-btn" onclick="toggleDarkMode()">🌗 Invert</button>
-      <button class="uw-tool-btn" style="background:#dc2626; border-color:#dc2626;" onclick="showScoreReport()">End Block</button>
-    </div>
-  </header>
-
-  <!-- MAIN EXAM INTERFACE -->
-  <div class="uw-workspace" id="exam-workspace">
-    <!-- Left Number Navigator -->
-    <aside class="uw-sidebar" id="question-sidebar"></aside>
-
-    <!-- Main Question & Explanation Area -->
-    <main class="uw-main">
-      <div class="uw-container">
-        <div class="question-stem" id="question-text">Loading question...</div>
-
-        <div class="options-box" id="options-container"></div>
-
-        <button class="submit-btn" id="submit-btn" onclick="submitAnswer()">Submit</button>
-
-        <!-- UWorld Explanation Box -->
-        <div class="uw-explanation" id="explanation-section">
-          <div class="exp-banner" id="exp-banner"></div>
-          <div class="exp-body" id="exp-text"></div>
-          <div class="edu-objective" id="edu-objective-box"></div>
-        </div>
-      </div>
-    </main>
-  </div>
-
-  <!-- ADMIN INTERFACE -->
-  <div class="admin-view" id="admin-workspace">
-    <div class="admin-card">
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:12px; margin-bottom:18px;">
-        <h2 style="margin:0; color:#18365c;">QBank Admin Question Manager</h2>
-        <button class="submit-btn" style="background:#475569;" onclick="closeAdmin()">← Return to Exam</button>
-      </div>
-
-      <div style="background:#f8fafc; padding:16px; border:1px solid #cbd5e1; border-radius:6px; margin-bottom:20px;">
-        <h3 style="margin:0 0 12px 0; font-size:16px;" id="form-title">Add New Question</h3>
-        <input type="hidden" id="edit-index" value="-1" />
-        <div class="form-group">
+const ADMIN_PASSWORD = "admin123";
+let quizData = [
+{
+question: "A 54-year-old man comes to the emergency department due to 2 hours of substernal chest pressure radiating to his left arm. Electrocardiography shows ST-segment elevations in leads II, III, and aVF. Occlusion of which of the following arteries is the most likely cause of this patient's presentation?",
+options: [
+"Left anterior descending artery",
+"Left circumflex artery",
+"Right coronary artery",
+"Left internal mammary artery"
+],
+answer: 2,
+explanation: "ST-segment elevations in the inferior leads (II, III, and aVF) indicate an inferior wall myocardial infarction, which is most commonly caused by occlusion of the right coronary artery (RCA) in right-dominant circulations.",
+objective: "Inferior wall myocardial infarctions present with ST elevations in leads II, III, and aVF and are most commonly caused by acute occlusion of the right coronary artery."
+},
+{
+question: "Which organelle is primarily responsible for generating adenosine triphosphate (ATP) via oxidative phosphorylation in eukaryotic cells?",
+options: [
+"Golgi apparatus",
+"Mitochondria",
+"Smooth endoplasmic reticulum",
+"Peroxisome"
+],
+answer: 1,
+explanation: "Mitochondria contain the electron transport chain and ATP synthase along their inner membrane, producing the majority of cellular ATP through oxidative phosphorylation.",
+objective: "Mitochondria are the primary site of aerobic respiration and ATP synthesis via oxidative phosphorylation."
+}
+];
+let currentIndex = 0;
+let userState = [];
+let secondsElapsed = 0;
+function initState() {
+userState = quizData.map(() => ({
+selected: null,
+submitted: false,
+marked: false,
+struck: [false, false, false, false]
+}));
+}
+setInterval(() => {
+secondsElapsed++;
+const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, "0");
+const secs = String(secondsElapsed % 60).padStart(2, "0");
+document.getElementById("timer-display").textContent = ${mins}:${secs};
+}, 1000);
+function renderSidebar() {
+const sidebar = document.getElementById("question-sidebar");
+sidebar.innerHTML = "";
+quizData.forEach((q, idx) => {
+const st = userState[idx];
+const btn = document.createElement("div");
+btn.className = "q-nav-item";
+if (idx === currentIndex) btn.classList.add("current");
+if (st.submitted) {
+btn.classList.add(st.selected === q.answer ? "answered-correct" : "answered-wrong");
+}
+btn.textContent = idx + 1;
+if (st.marked) {
+const flag = document.createElement("span");
+flag.className = "q-nav-flag";
+flag.textContent = "🚩";
+btn.appendChild(flag);
+}
+btn.onclick = () => { currentIndex = idx; renderQuestion(); };
+sidebar.appendChild(btn);
+});
+}
+function renderQuestion() {
+if (quizData.length === 0) return;
+const q = quizData[currentIndex];
+const st = userState[currentIndex];
+const letters = ["A", "B", "C", "D"];
+document.getElementById("item-counter").textContent = Item ${currentIndex + 1} of ${quizData.length};
+const markBtn = document.getElementById("mark-btn");
+markBtn.classList.toggle("active", st.marked);
+markBtn.textContent = st.marked ? "🚩 Marked" : "🚩 Mark";
+document.getElementById("question-text").textContent = q.question;
+const optionsEl = document.getElementById("options-container");
+optionsEl.innerHTML = "";
+q.options.forEach((optText, idx) => {
+const row = document.createElement("div");
+row.className = "option-row";
+if (st.submitted) {
+if (idx === q.answer) row.classList.add("correct");
+else if (idx === st.selected) row.classList.add("wrong");
+} else if (st.selected === idx) {
+row.classList.add("selected");
+}
+const left = document.createElement("div");
+left.className = "option-left";
+const radio = document.createElement("input");
+radio.type = "radio";
+radio.name = "mcq-opt";
+radio.checked = st.selected === idx;
+radio.disabled = st.submitted;
+const label = document.createElement("span");
+label.className = "option-text" + (st.struck[idx] ? " struck" : "");
+label.textContent = ${letters[idx]}. ${optText};
+left.appendChild(radio);
+left.appendChild(label);
+row.onclick = () => {
+if (!st.submitted) {
+st.selected = idx;
+renderQuestion();
+}
+};
+const strikeBtn = document.createElement("button");
+strikeBtn.className = "strike-btn";
+strikeBtn.textContent = "Strike";
+strikeBtn.title = "Cross out option";
+strikeBtn.onclick = (e) => {
+e.stopPropagation();
+st.struck[idx] = !st.struck[idx];
+renderQuestion();
+};
+row.appendChild(left);
+row.appendChild(strikeBtn);
+optionsEl.appendChild(row);
+});
+const submitBtn = document.getElementById("submit-btn");
+const expSection = document.getElementById("explanation-section");
+if (st.submitted) {
+submitBtn.style.display = "none";
+expSection.style.display = "block";
+const isCorrect = st.selected === q.answer;
+const banner = document.getElementById("exp-banner");
+banner.className = "exp-banner " + (isCorrect ? "correct" : "wrong");
+banner.textContent = isCorrect
+? ✓ Correct! (${letters[q.answer]})
+: ✕ Incorrect. Correct Answer: ${letters[q.answer]};
+document.getElementById("exp-text").textContent = q.explanation || "No detailed explanation provided.";
+const objBox = document.getElementById("edu-objective-box");
+if (q.objective) {
+objBox.style.display = "block";
+objBox.innerHTML = <strong>Educational Objective:</strong><br>${q.objective};
+} else {
+objBox.style.display = "none";
+}
+} else {
+submitBtn.style.display = "inline-block";
+expSection.style.display = "none";
+}
+renderSidebar();
+}
+function submitAnswer() {
+const st = userState[currentIndex];
+if (st.selected === null) {
+alert("Please select an answer choice before submitting.");
+return;
+}
+st.submitted = true;
+renderQuestion();
+}
+function toggleMark() {
+userState[currentIndex].marked = !userState[currentIndex].marked;
+renderQuestion();
+}
+function prevQuestion() {
+if (currentIndex > 0) { currentIndex--; renderQuestion(); }
+}
+function nextQuestion() {
+if (currentIndex < quizData.length - 1) { currentIndex++; renderQuestion(); }
+}
+function toggleDarkMode() {
+document.body.classList.toggle("dark-mode");
+}
+function toggleModal(id, show) {
+document.getElementById(id).style.display = show ? "flex" : "none";
+}
+function showScoreReport() {
+let correctCount = 0;
+let answeredCount = 0;
+quizData.forEach((q, i) => {
+if (userState[i].submitted) {
+answeredCount++;
+if (userState[i].selected === q.answer) correctCount++;
+}
+});
+const pct = quizData.length > 0 ? Math.round((correctCount / quizData.length) * 100) : 0;
+document.getElementById("final-percent").textContent = ${pct}%;
+document.getElementById("final-stats").textContent = You answered ${correctCount} out of ${quizData.length} questions correctly (${answeredCount} submitted).;
+toggleModal("score-modal", true);
+}
+function restartBlock() {
+currentIndex = 0;
+secondsElapsed = 0;
+initState();
+toggleModal("score-modal", false);
+renderQuestion();
+}
+function openAdmin() {
+const pass = prompt("Enter Admin Password:");
+if (pass === ADMIN_PASSWORD) {
+document.getElementById("exam-workspace").style.display = "none";
+document.getElementById("admin-workspace").style.display = "block";
+renderAdminList();
+} else if (pass !== null) {
+alert("Incorrect password.");
+}
+}
+function closeAdmin() {
+document.getElementById("admin-workspace").style.display = "none";
+document.getElementById("exam-workspace").style.display = "flex";
+initState();
+currentIndex = 0;
+renderQuestion();
+}
+function renderAdminList() {
+const listEl = document.getElementById("admin-q-list");
+document.getElementById("q-count").textContent = quizData.length;
+listEl.innerHTML = "";
+quizData.forEach((item, index) => {
+const row = document.createElement("div");
+row.className = "q-list-row";
+row.innerHTML = <div style="font-size:14px;"><strong>${index + 1}.</strong> ${item.question.substring(0, 95)}...</div> <div style="display:flex; gap:6px; flex-shrink:0;"> <button class="strike-btn" style="padding:5px 10px;" onclick="editQuestion(${index})">Edit</button> <button class="strike-btn" style="padding:5px 10px; color:#dc2626;" onclick="deleteQuestion(${index})">Delete</button> </div>;
+listEl.appendChild(row);
+});
+}
+function saveQuestion() {
+const q = document.getElementById("in-q").value.trim();
+const opt0 = document.getElementById("in-opt0").value.trim();
+const opt1 = document.getElementById("in-opt1").value.trim();
+const opt2 = document.getElementById("in-opt2").value.trim();
+const opt3 = document.getElementById("in-opt3").value.trim();
+const ans = parseInt(document.getElementById("in-ans").value, 10);
+const exp = document.getElementById("in-exp").value.trim();
+const obj = document.getElementById("in-obj").value.trim();
+const editIdx = parseInt(document.getElementById("edit-index").value, 10);
+if (!q || !opt0 || !opt1 || !opt2 || !opt3) {
+alert("Please enter the question and all 4 choices.");
+return;
+}
+const newObj = { question: q, options: [opt0, opt1, opt2, opt3], answer: ans, explanation: exp, objective: obj };
+if (editIdx >= 0) quizData[editIdx] = newObj;
+else quizData.push(newObj);
+resetForm();
+renderAdminList();
+}
+function editQuestion(index) {
+const item = quizData[index];
+document.getElementById("edit-index").value = index;
+document.getElementById("form-title").textContent = Editing Item #${index + 1};
+document.getElementById("in-q").value = item.question;
+document.getElementById("in-opt0").value = item.options[0] || "";
+document.getElementById("in-opt1").value = item.options[1] || "";
+document.getElementById("in-opt2").value = item.options[2] || "";
+document.getElementById("in-opt3").value = item.options[3] || "";
+document.getElementById("in-ans").value = item.answer;
+document.getElementById("in-exp").value = item.explanation || "";
+document.getElementById("in-obj").value = item.objective || "";
+document.getElementById("cancel-edit-btn").style.display = "inline-block";
+}
+function deleteQuestion(index) {
+if (confirm("Delete this question?")) {
+quizData.splice(index, 1);
+renderAdminList();
+}
+}
+function resetForm() {
+document.getElementById("edit-index").value = "-1";
+document.getElementById("form-title").textContent = "Add New Question";
+document.getElementById("in-q").value = "";
+document.getElementById("in-opt0").value = "";
+document.getElementById("in-opt1").value = "";
+document.getElementById("in-opt2").value = "";
+document.getElementById("in-opt3").value = "";
+document.getElementById("in-ans").value = "0";
+document.getElementById("in-exp").value = "";
+document.getElementById("in-obj").value = "";
+document.getElementById("cancel-edit-btn").style.display = "none";
+}
+function copyUpdatedHTML() {
+const dataScript = document.getElementById("quiz-data-script");
+dataScript.textContent = \n  const ADMIN_PASSWORD = ${JSON.stringify(ADMIN_PASSWORD)};\n\n  let quizData = ${JSON.stringify(quizData, null, 2)};\n;
+document.getElementById("admin-workspace").style.display = "none";
+document.getElementById("exam-workspace").style.display = "flex";
+const fullHTML = "\n" + document.documentElement.outerHTML;
+document.getElementById("exam-workspace").style.display = "none";
+document.getElementById("admin-workspace").style.display = "block";
+navigator.clipboard.writeText(fullHTML).then(() => {
+const status = document.getElementById("copy-status");
+status.textContent = "✓ Copied! Paste into GitHub index.html";
+setTimeout(() => status.textContent = "", 4000);
+});
+}
+initState();
+renderQuestion();
