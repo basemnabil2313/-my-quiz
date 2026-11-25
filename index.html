@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QBank</title>
+<style>
+:root{--card:#fff;--sel:#dbeaf6;--hov:#f5f9fc;--note:#fff8e1;--blue:#14537f;--blue2:#0e3f61;--bg:#eef2f6;--line:#d3dbe3;--ok:#2e8b57;--okbg:#e4f4ea;--bad:#c0392b;--badbg:#fbe9e7;--ink:#1d2933;--mute:#5f6f7d;--gold:#f2b632}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:var(--fs,16px)/1.55 "Segoe UI",Roboto,Arial,sans-serif}
+header{background:var(--blue);color:#fff;display:flex;align-items:center;gap:16px;padding:10px 20px;position:sticky;top:0;z-index:5}
+header .brand{font-weight:700;font-size:20px;margin-right:auto}
+header button{background:none;border:0;color:#cfe3f3;font:inherit;padding:6px 10px;cursor:pointer;border-bottom:3px solid transparent}
+header button.on{color:#fff;border-color:var(--gold)}
+#timer{font-variant-numeric:tabular-nums;background:var(--blue2);padding:4px 12px;border-radius:4px}
+main{max-width:1100px;margin:20px auto;padding:0 16px}
+.layout{display:grid;grid-template-columns:200px 1fr;gap:16px}
+aside{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:12px;align-self:start}
+aside h4{margin:0 0 8px;font-size:14px;color:var(--mute)}
+.nav{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+.nav button{border:1px solid var(--line);background:var(--card);border-radius:3px;padding:5px 0;cursor:pointer;font:inherit;font-size:13px}
+.nav .sel{background:var(--sel);border-color:var(--blue)}
+.nav .ok{background:var(--ok);color:#fff;border-color:var(--ok)}
+.nav .bad{background:var(--bad);color:#fff;border-color:var(--bad)}
+.nav .cur{outline:2px solid var(--gold);outline-offset:1px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:22px}
+.narrow{max-width:360px;margin:60px auto;display:grid;gap:12px}
+.qhead{display:flex;justify-content:space-between;color:var(--mute);border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:16px}
+.stem{white-space:pre-wrap;font-size:17px;margin:0 0 18px}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:4px;padding:10px 12px;cursor:pointer}
+.opt:hover{background:var(--hov)}
+.opt input{position:absolute;opacity:0}
+.ltr{flex:none;width:26px;height:26px;border-radius:50%;border:1px solid var(--mute);display:grid;place-items:center;font-size:13px}
+.opt.picked{border-color:var(--blue);background:var(--sel)}
+.opt.picked .ltr{background:var(--blue);color:#fff;border-color:var(--blue)}
+.opt.right{border-color:var(--ok);background:var(--okbg)}
+.opt.right .ltr{background:var(--ok);color:#fff;border-color:var(--ok)}
+.opt.wrong{border-color:var(--bad);background:var(--badbg)}
+.opt.wrong .ltr{background:var(--bad);color:#fff;border-color:var(--bad)}
+.opt:has(input:focus-visible){outline:2px solid var(--blue)}
+.res{margin-top:20px;border-left:5px solid;padding:12px 16px;border-radius:0 4px 4px 0}
+.res.ok{border-color:var(--ok);background:var(--okbg)}
+.res.bad{border-color:var(--bad);background:var(--badbg)}
+.res h3{margin:0 0 6px}
+.obj{margin-top:12px;background:var(--note);border:1px solid var(--gold);border-radius:4px;padding:10px 14px}
+.bar{display:flex;gap:10px;justify-content:space-between;margin-top:22px;border-top:1px solid var(--line);padding-top:16px}
+.btn{background:var(--blue);color:#fff;border:1px solid var(--blue);border-radius:4px;padding:8px 20px;font:inherit;cursor:pointer}
+.btn:hover{background:var(--blue2)}
+.btn.ghost{background:var(--card);color:var(--blue)}
+.btn.ghost:hover{background:var(--hov)}
+.btn.danger{background:var(--card);color:var(--bad);border-color:var(--bad)}
+.btn:disabled{opacity:.4;cursor:default}
+input[type=text],input[type=password],textarea{width:100%;font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:4px;background:var(--card)}
+textarea{min-height:90px;resize:vertical}
+label.f{display:block;font-size:14px;color:var(--mute);margin:12px 0 4px}
+.arow{display:grid;grid-template-columns:24px 1fr;gap:8px;align-items:center;margin-bottom:6px}
+.adm{display:grid;grid-template-columns:300px 1fr;gap:16px}
+.list{max-height:70vh;overflow:auto}
+.list button{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:8px;font:inherit;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.list button.on{background:var(--sel)}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.note{background:var(--note);border:1px solid var(--gold);border-radius:4px;padding:10px 14px;font-size:14px;margin-bottom:12px}
+.pic{display:block;max-width:100%;border:1px solid var(--line);border-radius:4px;margin-top:12px}
+h4{margin:14px 0 6px;color:var(--mute);font-size:14px}
+.cols{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:24px}
+.chk{display:flex;gap:8px;align-items:center;padding:3px 0;cursor:pointer}
+.chk span,.mut{color:var(--mute);font-size:14px}
+.opt.struck span:not(.ltr){text-decoration:line-through;opacity:.55}
+.x{background:none;border:0;color:var(--mute);cursor:pointer;font-size:14px}
+.prow{display:grid;grid-template-columns:180px 1fr 50px;gap:10px;align-items:center;margin:6px 0}
+.track{background:var(--line);border-radius:3px;height:10px}.fill{background:var(--ok);height:100%;border-radius:3px}
+.qhead .btn{padding:3px 12px;font-size:14px}
+@media(max-width:760px){.cols{grid-template-columns:1fr}.prow{grid-template-columns:100px 1fr 44px}}
+body.dark{--bg:#12181e;--card:#1c242c;--line:#33414d;--ink:#e6edf3;--mute:#9aa9b6;--okbg:#17352a;--badbg:#3a1d1a;--sel:#1f3a52;--hov:#233342;--note:#3a3320}
+body.dark .btn.ghost,body.dark .score{color:#8ec5ee}
+body.dark .btn.danger{color:#ff8a7a}
+input,textarea{color:var(--ink)}
+header{flex-wrap:wrap;gap:8px 12px}
+#tabs{display:flex;flex-wrap:wrap;gap:2px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center}
+.stats .score{font-size:32px}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.hrow{display:flex;gap:12px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--line);padding:10px 0}
+.hrow>span{flex:1;min-width:110px}
+.fcard{min-height:200px;border:1px solid var(--line);border-radius:6px;padding:24px;cursor:pointer;margin-top:12px}
+#modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:grid;place-items:center;z-index:20}
+.mbox{background:var(--card);color:var(--ink);border-radius:6px;padding:16px;max-width:520px;width:92%;max-height:80vh;overflow:auto}
+.mh{display:flex;justify-content:space-between;margin-bottom:10px}
+table.lab{width:100%;border-collapse:collapse}
+table.lab td{border-bottom:1px solid var(--line);padding:4px 6px}
+@media(max-width:760px){.cols2,.stats{grid-template-columns:1fr}}
+.score{font-size:42px;font-weight:700;color:var(--blue)}
+@media(max-width:760px){.layout,.adm{grid-template-columns:1fr}.nav{grid-template-columns:repeat(8,1fr)}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+</head>
+<body>
+<header>
+  <span class="brand">QBank</span>
+  <span id="timer">00:00</span>
+  <span id="tabs"></span>
+  <button title="Smaller text" onclick="fs(-1)">A−</button><button title="Larger text" onclick="fs(1)">A+</button><button title="Dark mode" onclick="dark()">◐</button><button id="so" onclick="logout()" style="display:none">Sign out</button>
+</header>
+<main id="app"></main>
+
+<script>
+const SUPABASE_URL = "https://gejjcurzywhiyhgvvzoa.supabase.co";
+const SUPABASE_KEY = "sb_publishable_eOoHXMbap4ZF_4Z8vkG6GQ_phqCgxaR";
+let db = null, Q = [], i = 0, A = {}, view = "practice", done = false, authed = false, USER = null, isAdmin = false, STORE = {}, editing = null;
+const t0 = Date.now();
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const val = id => document.getElementById(id).value.trim();
+const msg = t => { document.getElementById("app").innerHTML = '<div class="card">' + t + "</div>"; };
+
+async function load() {
+  if (SUPABASE_URL.startsWith("PASTE")) return msg("Setup needed: paste your Supabase URL and key at the top of index.html.");
+  try { db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); } catch (e) { return msg("The Supabase URL looks wrong. Check it at the top of index.html."); }
+  const { data } = await db.auth.getSession();
+  if (!data.session) return loginScreen();
+  boot(data.session);
+}
+function loginScreen() {
+  document.getElementById("tabs").innerHTML = "";
+  document.getElementById("so").style.display = "none";
+  document.getElementById("app").innerHTML = `<div class="card narrow"><h2 style="margin:0">Sign in</h2>
+    <p class="mut" style="margin:0">Accounts are created by your instructor.</p>
+    <input type="text" id="em" placeholder="Email" autocomplete="username">
+    <input type="password" id="pw" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
+    <button class="btn" onclick="login()">Sign in</button></div>`;
+}
+async function login() {
+  const { data, error } = await db.auth.signInWithPassword({ email: val("em"), password: document.getElementById("pw").value });
+  if (error) return alert("Sign in failed: " + error.message);
+  boot(data.session);
+}
+async function boot(session) {
+  USER = session.user;
+  msg("Loading…");
+  const [qr, ar, ur] = await Promise.all([
+    db.from("questions").select("*").order("created_at"),
+    db.from("admins").select("user_id").eq("user_id", USER.id),
+    db.from("user_data").select("data").eq("user_id", USER.id).maybeSingle()
+  ]);
+  if (qr.error) return msg("Couldn’t load questions: " + esc(qr.error.message));
+  Q = qr.data;
+  isAdmin = !!(ar.data && ar.data.length);
+  STORE = (ur.data && ur.data.data) || {};
+  P = load_("qbank_progress", {}); N = load_("qbank_notes", {}); H = load_("qbank_history", []);
+  SET = load_("qbank_set", { dark: false, fs: 16 });
+  applySet();
+  T = null; screen = "home"; editing = null; view = "dash";
+  document.getElementById("so").style.display = "";
+  render();
+}
+let saveTimer = null;
+function cloudSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+    const { error } = await db.from("user_data").upsert({ user_id: USER.id, data: STORE, updated_at: new Date().toISOString() });
+    if (error) console.error("Save failed", error.message);
+  }, 800);
+}
+
+setInterval(() => {
+  const el = document.getElementById("timer");
+  if (!T || T.ended || screen !== "test") { el.style.visibility = "hidden"; return; }
+  el.style.visibility = "visible";
+  const used = Math.floor((Date.now() - T.t0) / 1000);
+  const t = T.timed ? Math.max(0, T.sec - used) : used;
+  el.textContent = mmss(t);
+  if (T.timed && t === 0) endTest();
+}, 1000);
+
+const TABS = [["dash", "Dashboard"], ["practice", "Create test"], ["history", "Previous tests"], ["notes", "Notebook"], ["cards", "Flashcards"], ["admin", "Admin"]];
+view = "dash";
+function setView(v) { view = v; render(); window.scrollTo(0, 0); }
+function render() {
+  if (!db) return;
+  document.getElementById("tabs").innerHTML = TABS.filter(t => t[0] !== "admin" || isAdmin).map(([k, n]) => `<button class="${view === k ? "on" : ""}" onclick="setView('${k}')">${n}</button>`).join("");
+  const f = { dash, practice, history: histView, notes, cards, admin }[view];
+  document.getElementById("app").innerHTML = f();
+}
+
+/* ---------- Student side ---------- */
+let screen = "home", T = null, P = {};
+const saveP = () => put_("qbank_progress", P);
+const mmss = n => String(Math.floor(n / 60)).padStart(2, "0") + ":" + String(n % 60).padStart(2, "0");
+const uniq = k => [...new Set(Q.map(q => q[k] || "").filter(Boolean))].sort();
+const FILTERS = {
+  all: ["All questions", q => true],
+  unused: ["Unused", q => !P[q.id] || !P[q.id].u],
+  wrong: ["Incorrect", q => P[q.id] && P[q.id].c === 0],
+  marked: ["Marked", q => P[q.id] && P[q.id].m]
+};
+const checked = n => [...document.querySelectorAll("input[name=" + n + "]:checked")].map(e => e.value);
+
+function practice() {
+  if (!Q.length) return '<div class="card">No questions yet. Open Admin to add some.</div>';
+  return screen === "home" ? home() : screen === "report" ? report() : testView();
+}
+function home() {
+  const chk = (k, name) => uniq(k).map(v => `<label class="chk"><input type="checkbox" name="${name}" value="${esc(v)}" onchange="upd()"> ${esc(v)} <span>(${Q.filter(q => q[k] === v).length})</span></label>`).join("") || `<p class="mut">None yet. Add a ${k} to your questions in Admin.</p>`;
+  setTimeout(upd, 0);
+  return `${resumeCard()}<div class="card"><h2 style="margin-top:0">Create test</h2><div class="cols">
+    <div><h4>Mode</h4>
+      <label class="chk"><input type="radio" name="mode" value="tutor" checked> Tutor: feedback after each question</label>
+      <label class="chk"><input type="radio" name="mode" value="timed"> Timed: feedback at the end</label>
+      <h4>Question pool</h4>
+      ${Object.entries(FILTERS).map(([k, [n, f]], j) => `<label class="chk"><input type="radio" name="pool" value="${k}" ${j ? "" : "checked"} onchange="upd()"> ${n} <span>(${Q.filter(f).length})</span></label>`).join("")}
+      <h4>Number of questions</h4><input type="number" id="num" min="1" value="20" style="width:90px"> <span id="avail" class="mut"></span></div>
+    <div><h4>Subjects</h4>${chk("subject", "sub")}</div>
+    <div><h4>Systems</h4>${chk("system", "sys")}</div></div>
+    <div class="bar"><span class="mut">Leave subjects and systems unticked to include all.</span><button class="btn" onclick="startTest()">Start test</button></div></div>`;
+}
+function pool() {
+  const sb = checked("sub"), sy = checked("sys"), f = FILTERS[checked("pool")[0] || "all"][1];
+  return Q.filter(q => (!sb.length || sb.includes(q.subject)) && (!sy.length || sy.includes(q.system)) && f(q));
+}
+function upd() { const el = document.getElementById("avail"); if (el) el.textContent = pool().length + " available"; }
+function startTest() {
+  let ids = pool();
+  if (!ids.length) return alert("No questions match these choices.");
+  const n = Math.min(Math.max(1, +document.getElementById("num").value || 1), ids.length);
+  ids = ids.map(q => [Math.random(), q]).sort((a, b) => a[0] - b[0]).slice(0, n).map(x => x[1]);
+  T = { qs: ids, i: 0, a: {}, timed: checked("mode")[0] === "timed", sec: n * 90, t0: Date.now(), ended: false, review: false };
+  screen = "test"; render(); window.scrollTo(0, 0);
+}
+function testView() {
+  const q = T.qs[T.i], a = T.a[q.id] || {}, show = T.review || (!T.timed && a.sub), st = a.st || [];
+  const mk = x => P[x.id] && P[x.id].m;
+  const nav = T.qs.map((x, n) => {
+    const s = T.a[x.id] || {};
+    let c = s.sel != null ? "sel" : "";
+    if (T.review || (!T.timed && s.sub)) c = s.sel === x.answer ? "ok" : "bad";
+    return `<button class="${c} ${n === T.i ? "cur" : ""}" onclick="tgo(${n})">${n + 1}${mk(x) ? "⚑" : ""}</button>`;
+  }).join("");
+  const opts = q.options.map((o, n) => {
+    if (!o) return "";
+    let c = "opt";
+    if (a.sel === n) c += " picked";
+    if (st.includes(n)) c += " struck";
+    if (show) { if (n === q.answer) c += " right"; else if (a.sel === n) c += " wrong"; }
+    return `<label class="${c}"><input type="radio" name="o" ${a.sel === n ? "checked" : ""} ${show ? "disabled" : ""} onchange="tpick(${n})"><span class="ltr">${"ABCDE"[n]}</span><span style="flex:1">${esc(o)}</span>${show ? "" : `<button type="button" class="x" title="Cross out" onclick="event.preventDefault();event.stopPropagation();tstrike(${n})">✕</button>`}</label>`;
+  }).join("");
+  const side = T.review
+    ? `<button class="btn ghost" onclick="screen='report';T.review=false;render()">Back to results</button>`
+    : `<div style="display:grid;gap:8px"><button class="btn ghost" onclick="if(confirm('End this block?'))endTest()">End block</button>
+       <button class="btn ghost" onclick="suspend()">Suspend</button>
+       <button class="btn ghost" onclick="labs()">Lab values</button><button class="btn ghost" onclick="calc()">Calculator</button></div>`;
+  return `<div class="layout"><aside><h4 style="margin-top:0">Questions</h4><div class="nav">${nav}</div>${side}</aside>
+    <section class="card"><div class="qhead"><b>Item ${T.i + 1} of ${T.qs.length}</b>
+      <span>${esc(q.subject)}${q.system ? " / " + esc(q.system) : ""}</span>
+      <button class="btn ghost" onclick="tmark()">${mk(q) ? "⚑ Marked" : "⚐ Mark"}</button></div>
+      <p class="stem">${esc(q.stem)}</p>${q.stem_image ? `<img class="pic" style="margin:-6px 0 18px" src="${esc(q.stem_image)}" alt="Question image">` : ""}
+      <div class="opts">${opts}</div>${show ? explain(q, a) : ""}
+      <label class="f">My notes</label><textarea style="min-height:60px" oninput="setNote('${q.id}',this.value)">${esc(N[q.id] || "")}</textarea>
+      <div class="bar"><button class="btn ghost" ${T.i ? "" : "disabled"} onclick="tgo(${T.i - 1})">Previous</button>
+        ${!T.timed && !a.sub && !T.review ? `<button class="btn" ${a.sel == null ? "disabled" : ""} onclick="tsubmit()">Submit</button>` : ""}
+        <button class="btn ghost" ${T.i < T.qs.length - 1 ? "" : "disabled"} onclick="tgo(${T.i + 1})">Next</button></div></section></div>`;
+}
+function explain(q, a) {
+  const ok = a.sel === q.answer;
+  const yours = a.sel == null ? " &nbsp;(not answered)" : ok ? "" : " &nbsp;Your answer: <b>" + "ABCDE"[a.sel] + "</b>";
+  return `<div class="res ${ok ? "ok" : "bad"}"><h3>${ok ? "Correct" : "Incorrect"}</h3>
+    <div>Correct answer: <b>${"ABCDE"[q.answer]}</b>${yours}</div>
+    <p style="white-space:pre-wrap;margin:10px 0 0">${esc(q.explanation)}</p>${q.explanation_image ? `<img class="pic" src="${esc(q.explanation_image)}" alt="Explanation image">` : ""}</div>
+    ${q.objective ? `<div class="obj"><b>Educational objective:</b> ${esc(q.objective)}</div>` : ""}`;
+}
+const cur = () => (T.a[T.qs[T.i].id] = T.a[T.qs[T.i].id] || {});
+function tpick(n) { cur().sel = n; render(); }
+function tstrike(n) { const a = cur(); a.st = a.st || []; const k = a.st.indexOf(n); k < 0 ? a.st.push(n) : a.st.splice(k, 1); render(); }
+function tmark() { const id = T.qs[T.i].id; P[id] = { ...(P[id] || {}), m: !(P[id] && P[id].m) }; saveP(); render(); }
+function record(q, a) { const o = P[q.id] || {}; P[q.id] = { ...o, u: (o.u || 0) + 1, c: a.sel === q.answer ? 1 : 0 }; a.rec = true; }
+function tsubmit() { const a = cur(); a.sub = true; record(T.qs[T.i], a); saveP(); render(); }
+function tgo(n) { T.i = n; render(); window.scrollTo(0, 0); }
+function endTest() {
+  if (!T || T.ended) return;
+  T.qs.forEach(q => { const a = T.a[q.id]; if (a && a.sel != null && !a.rec) { a.sub = true; record(q, a); } });
+  T.ended = true; T.elapsed = Math.floor((Date.now() - T.t0) / 1000);
+  H.unshift({ d: Date.now(), ids: T.qs.map(q => q.id), a: T.a, timed: T.timed, el: T.elapsed }); H = H.slice(0, 50); saveH();
+  saveP(); screen = "report"; render();
+}
+function report() {
+  const rows = {}; let right = 0;
+  T.qs.forEach(q => {
+    const k = q.subject || "General", ok = (T.a[q.id] || {}).sel === q.answer;
+    rows[k] = rows[k] || [0, 0]; rows[k][1]++;
+    if (ok) { rows[k][0]++; right++; }
+  });
+  const n = T.qs.length;
+  return `<div class="card" style="max-width:640px;margin:0 auto"><div style="text-align:center"><div class="score">${Math.round(right / n * 100)}%</div>
+    <div>${right} of ${n} correct, time ${mmss(T.elapsed || 0)}</div></div>
+    <h4>Performance by subject</h4>
+    ${Object.entries(rows).map(([k, [r, t]]) => `<div class="prow"><span>${esc(k)}</span><div class="track"><div class="fill" style="width:${Math.round(r / t * 100)}%"></div></div><span>${r}/${t}</span></div>`).join("")}
+    <div class="bar"><button class="btn ghost" onclick="screen='home';T=null;render()">New test</button>
+      <button class="btn" onclick="T.review=true;T.i=0;screen='test';render()">Review answers</button></div></div>`;
+}
+
+/* ---------- More sections ---------- */
+const load_ = (k, d) => (STORE[k] == null ? d : STORE[k]);
+const put_ = (k, v) => { STORE[k] = v; if (USER) cloudSave(); };
+let N = load_("qbank_notes", {}), H = load_("qbank_history", []), SET = load_("qbank_set", { dark: false, fs: 16 });
+const saveH = () => put_("qbank_history", H);
+function applySet() { document.body.classList.toggle("dark", SET.dark); document.body.style.setProperty("--fs", SET.fs + "px"); }
+function dark() { SET.dark = !SET.dark; put_("qbank_set", SET); applySet(); }
+function fs(d) { SET.fs = Math.min(22, Math.max(13, SET.fs + d)); put_("qbank_set", SET); applySet(); }
+applySet();
+function setNote(id, v) { if (v.trim()) N[id] = v; else delete N[id]; put_("qbank_notes", N); }
+const byId = id => Q.find(q => q.id === id);
+
+function modal(title, html) {
+  closeModal();
+  const d = document.createElement("div"); d.id = "modal";
+  d.innerHTML = `<div class="mbox"><div class="mh"><b>${title}</b><button class="x" onclick="closeModal()">✕</button></div>${html}</div>`;
+  d.onclick = e => { if (e.target === d) closeModal(); };
+  document.body.appendChild(d);
+}
+function closeModal() { const m = document.getElementById("modal"); if (m) m.remove(); }
+const LABS = [["Hemoglobin (M / F)", "13.5–17.5 / 12.0–16.0 g/dL"], ["Hematocrit (M / F)", "41–53% / 36–46%"], ["Leukocyte count", "4,500–11,000 /mm³"],
+  ["Platelet count", "150,000–400,000 /mm³"], ["MCV", "80–100 fL"], ["Sodium", "136–145 mEq/L"], ["Potassium", "3.5–5.0 mEq/L"], ["Chloride", "95–105 mEq/L"],
+  ["Bicarbonate", "22–28 mEq/L"], ["BUN", "7–18 mg/dL"], ["Creatinine", "0.6–1.2 mg/dL"], ["Glucose, fasting", "70–100 mg/dL"], ["Calcium", "8.4–10.2 mg/dL"],
+  ["Magnesium", "1.5–2.0 mEq/L"], ["AST / ALT", "8–20 U/L"], ["Alkaline phosphatase", "20–70 U/L"], ["Bilirubin, total", "0.1–1.0 mg/dL"], ["Albumin", "3.5–5.5 g/dL"],
+  ["Arterial pH", "7.35–7.45"], ["PaCO2", "33–45 mm Hg"], ["PaO2", "75–105 mm Hg"], ["TSH", "0.5–5.0 µU/mL"], ["Cholesterol, total", "< 200 mg/dL"]];
+function labs() { modal("Lab values", `<p class="mut">Common adult reference ranges. Your lab may differ.</p><table class="lab">${LABS.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table>`); }
+function calc() {
+  modal("Calculator", `<input type="text" id="ce" placeholder="Example: 70*1.5/2" onkeydown="if(event.key==='Enter')doCalc()">
+    <div class="bar"><b id="cr">&nbsp;</b><button class="btn" onclick="doCalc()">Calculate</button></div>`);
+  document.getElementById("ce").focus();
+}
+function doCalc() {
+  const e = document.getElementById("ce").value, out = document.getElementById("cr");
+  if (!/^[0-9+\-*/().\s]+$/.test(e)) return out.textContent = "Use numbers and + - * / ( ) only";
+  try { out.textContent = "= " + Math.round(Function('"use strict";return (' + e + ")")() * 1e6) / 1e6; } catch (x) { out.textContent = "Invalid expression"; }
+}
+
+function suspend() {
+  put_("qbank_susp", { ids: T.qs.map(q => q.id), i: T.i, a: T.a, timed: T.timed, sec: T.sec, used: Math.floor((Date.now() - T.t0) / 1000) });
+  T = null; screen = "home"; render();
+}
+function resumeCard() {
+  const x = load_("qbank_susp", null);
+  return x ? `<div class="note">You have a suspended test with ${x.ids.length} questions. <button class="btn" onclick="resume()">Resume</button></div>` : "";
+}
+function resume() {
+  const x = load_("qbank_susp", null), qs = x.ids.map(byId).filter(Boolean);
+  put_("qbank_susp", null);
+  if (!qs.length) return render();
+  T = { qs, i: Math.min(x.i, qs.length - 1), a: x.a, timed: x.timed, sec: x.sec, t0: Date.now() - x.used * 1000, ended: false, review: false };
+  screen = "test"; render();
+}
+
+function dash() {
+  const used = Q.filter(q => P[q.id] && P[q.id].u), right = used.filter(q => P[q.id].c === 1).length;
+  const grp = k => {
+    const m = {};
+    Q.forEach(q => {
+      const g = q[k]; if (!g) return;
+      m[g] = m[g] || [0, 0, 0]; m[g][2]++;
+      if (P[q.id] && P[q.id].u) { m[g][1]++; if (P[q.id].c === 1) m[g][0]++; }
+    });
+    return Object.entries(m).map(([g, [r, u, t]]) => `<div class="prow"><span>${esc(g)} <span class="mut">(${u}/${t})</span></span><div class="track"><div class="fill" style="width:${u ? Math.round(r / u * 100) : 0}%"></div></div><span>${u ? Math.round(r / u * 100) + "%" : "–"}</span></div>`).join("") || '<p class="mut">Nothing here yet.</p>';
+  };
+  return `<div class="card"><h2 style="margin-top:0">Dashboard</h2>
+    <div class="stats"><div><div class="score">${used.length ? Math.round(right / used.length * 100) : 0}%</div>correct overall</div>
+      <div><div class="score">${used.length}/${Q.length}</div>questions used</div>
+      <div><div class="score">${H.length}</div>tests taken</div></div>
+    <div class="cols2"><div><h4>Performance by subject</h4>${grp("subject")}</div><div><h4>Performance by system</h4>${grp("system")}</div></div>
+    <div class="bar"><span class="mut">Progress is saved in this browser.</span><button class="btn" onclick="setView('practice')">Create test</button></div></div>`;
+}
+function histView() {
+  if (!H.length) return '<div class="card">No tests yet. Create a test to get started.</div>';
+  return `<div class="card"><h2 style="margin-top:0">Previous tests</h2>${H.map((h, n) => {
+    const qs = h.ids.map(byId).filter(Boolean), r = qs.filter(q => (h.a[q.id] || {}).sel === q.answer).length;
+    return `<div class="hrow"><span>${new Date(h.d).toLocaleString()}</span><span>${h.timed ? "Timed" : "Tutor"}, ${qs.length} questions</span><b>${qs.length ? Math.round(r / qs.length * 100) : 0}% (${r}/${qs.length})</b><button class="btn ghost" onclick="reviewH(${n})">Review</button></div>`;
+  }).join("")}</div>`;
+}
+function reviewH(n) {
+  const h = H[n], qs = h.ids.map(byId).filter(Boolean);
+  if (!qs.length) return alert("Those questions were deleted.");
+  T = { qs, i: 0, a: h.a, timed: h.timed, ended: true, review: true, elapsed: h.el, t0: 0, sec: 0 };
+  screen = "test"; view = "practice"; render();
+}
+function notes() {
+  const ids = Object.keys(N).filter(byId);
+  if (!ids.length) return '<div class="card">Your notes will appear here. Write notes under any question during a test.</div>';
+  return `<div class="card"><h2 style="margin-top:0">Notebook</h2>${ids.map(id => {
+    const q = byId(id);
+    return `<div class="hrow" style="display:block"><div class="mut">${esc(q.subject)}${q.system ? " / " + esc(q.system) : ""}</div>
+      <p style="margin:4px 0"><b>${esc(q.stem.slice(0, 140))}…</b></p>
+      <textarea style="min-height:60px" oninput="setNote('${id}',this.value)">${esc(N[id])}</textarea>
+      <button class="btn danger" style="margin-top:6px" onclick="delNote('${id}')">Delete note</button></div>`;
+  }).join("")}</div>`;
+}
+function delNote(id) { delete N[id]; put_("qbank_notes", N); render(); }
+
+let FC = { pool: "marked", i: 0, flip: false };
+const DECKS = { marked: ["Marked", FILTERS.marked[1]], wrong: ["Incorrect", FILTERS.wrong[1]], all: ["All questions", () => true] };
+function cards() {
+  const d = Q.filter(DECKS[FC.pool][1]), q = d[FC.i];
+  const pick = `<div class="tools">${Object.entries(DECKS).map(([k, [n, f]]) => `<button class="btn ${FC.pool === k ? "" : "ghost"}" onclick="FC={pool:'${k}',i:0,flip:false};render()">${n} (${Q.filter(f).length})</button>`).join("")}</div>`;
+  if (!q) return `<div class="card"><h2 style="margin-top:0">Flashcards</h2>${pick}<p>No cards in this deck yet. Mark questions or answer some first.</p></div>`;
+  return `<div class="card"><h2 style="margin-top:0">Flashcards</h2>${pick}
+    <div class="fcard" onclick="FC.flip=!FC.flip;render()">${FC.flip
+      ? `<b>Answer: ${"ABCDE"[q.answer]}. ${esc(q.options[q.answer])}</b><p style="white-space:pre-wrap">${esc(q.objective || q.explanation)}</p>`
+      : `<p class="stem" style="margin:0">${esc(q.stem)}</p>`}</div>
+    <div class="bar"><button class="btn ghost" ${FC.i ? "" : "disabled"} onclick="FC.i--;FC.flip=false;render()">Previous</button>
+      <span class="mut">Card ${FC.i + 1} of ${d.length}. Click the card to flip.</span>
+      <button class="btn ghost" ${FC.i < d.length - 1 ? "" : "disabled"} onclick="FC.i++;FC.flip=false;render()">Next</button></div></div>`;
+}
+
+/* ---------- Admin side ---------- */
+async function logout() { await db.auth.signOut(); location.reload(); }
+function admin() {
+  if (!isAdmin) return '<div class="card">You don’t have access to this section.</div>';
+  const q = editing === "new" ? { subject: "", stem: "", options: ["", "", "", "", ""], answer: 0, explanation: "", objective: "" }
+          : editing != null ? Q[editing] : null;
+  const list = Q.map((x, n) => `<button class="${n === editing ? "on" : ""}" onclick="edit(${n})">${n + 1}. ${esc(x.stem.slice(0, 60))}</button>`).join("");
+  const form = !q ? '<div class="card">Pick a question on the left, or add a new one.</div>' : `<div class="card">
+    <label class="f" style="margin-top:0">Subject</label><input type="text" id="f-sub" list="dl-sub" value="${esc(q.subject)}">
+    <datalist id="dl-sub">${uniq("subject").map(v => `<option value="${esc(v)}">`).join("")}</datalist>
+    <label class="f">System</label><input type="text" id="f-sys" list="dl-sys" value="${esc(q.system || "")}">
+    <datalist id="dl-sys">${uniq("system").map(v => `<option value="${esc(v)}">`).join("")}</datalist>
+    <label class="f">Question</label><textarea id="f-stem">${esc(q.stem)}</textarea>
+    <label class="f">Question image (optional)</label>${imgField("f-simg", q.stem_image)}
+    <label class="f">Options (select the correct one)</label>
+    ${[0, 1, 2, 3, 4].map(n => `<div class="arow"><input type="radio" name="ans" value="${n}" ${q.answer === n ? "checked" : ""}><input type="text" id="f-o${n}" placeholder="Option ${"ABCDE"[n]}" value="${esc(q.options[n] || "")}"></div>`).join("")}
+    <label class="f">Explanation</label><textarea id="f-exp">${esc(q.explanation)}</textarea>
+    <label class="f">Explanation image (optional)</label>${imgField("f-eimg", q.explanation_image)}
+    <label class="f">Educational objective</label><input type="text" id="f-obj" value="${esc(q.objective)}">
+    <div class="bar"><button class="btn danger" ${editing === "new" ? "disabled" : ""} onclick="del()">Delete</button><button class="btn" onclick="saveQ()">Save question</button></div></div>`;
+  return `<div class="note">Signed in. Saved changes go live for all students immediately.</div>
+    <div class="tools"><button class="btn" onclick="edit('new')">Add question</button>
+      <button class="btn ghost" onclick="exportJson()">Export backup</button>
+      <button class="btn ghost" onclick="document.getElementById('imp').click()">Import JSON</button>
+      <button class="btn ghost" onclick="logout()">Sign out</button>
+      <input type="file" id="imp" accept=".json" hidden onchange="importJson(event)"></div>
+    <div class="adm"><div class="card list" style="padding:0">${list || '<p style="padding:12px">No questions yet.</p>'}</div>${form}</div>`;
+}
+const imgField = (id, url) => `<div><input type="hidden" id="${id}" value="${esc(url || "")}">
+  <img id="${id}-p" class="pic" style="max-width:280px;${url ? "" : "display:none"}" src="${esc(url || "")}" alt="">
+  <div class="tools" style="margin:8px 0 0"><button type="button" class="btn ghost" onclick="document.getElementById('${id}-f').click()">Add image</button>
+  <button type="button" class="btn ghost" onclick="setImg('${id}','')">Remove image</button>
+  <input type="file" id="${id}-f" accept="image/*" hidden onchange="upImg(event,'${id}')"></div></div>`;
+function setImg(id, url) {
+  document.getElementById(id).value = url;
+  const p = document.getElementById(id + "-p");
+  p.src = url; p.style.display = url ? "block" : "none";
+}
+async function upImg(e, id) {
+  const f = e.target.files[0];
+  if (!f) return;
+  if (f.size > 5 * 1024 * 1024) return alert("That image is over 5 MB. Use a smaller one.");
+  const name = Date.now() + "-" + f.name.replace(/[^\w.-]/g, "_");
+  const { error } = await db.storage.from("quiz-images").upload(name, f, { contentType: f.type });
+  if (error) return alert("Upload failed: " + error.message);
+  setImg(id, db.storage.from("quiz-images").getPublicUrl(name).data.publicUrl);
+}
+function edit(n) { editing = n; render(); }
+async function saveQ() {
+  const options = [0, 1, 2, 3, 4].map(n => val("f-o" + n));
+  const sel = document.querySelector('input[name="ans"]:checked');
+  const answer = sel ? +sel.value : 0;
+  if (!val("f-stem")) return alert("Write the question text.");
+  if (options.filter(Boolean).length < 2) return alert("Add at least two options.");
+  if (!options[answer]) return alert("The correct option can’t be empty.");
+  const row = { subject: val("f-sub"), system: val("f-sys"), stem: val("f-stem"), options, answer, explanation: val("f-exp"), objective: val("f-obj"), stem_image: val("f-simg"), explanation_image: val("f-eimg") };
+  const r = editing === "new"
+    ? await db.from("questions").insert(row).select().single()
+    : await db.from("questions").update(row).eq("id", Q[editing].id).select().single();
+  if (r.error) return alert("Save failed: " + r.error.message);
+  if (editing === "new") { Q.push(r.data); editing = Q.length - 1; } else Q[editing] = r.data;
+  render();
+}
+async function del() {
+  if (!confirm("Delete this question?")) return;
+  const { error } = await db.from("questions").delete().eq("id", Q[editing].id);
+  if (error) return alert("Delete failed: " + error.message);
+  Q.splice(editing, 1); editing = null; render();
+}
+function exportJson() {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(Q, null, 2)], { type: "application/json" }));
+  a.download = "questions-backup.json"; a.click();
+}
+function importJson(e) {
+  const r = new FileReader();
+  r.onload = async () => {
+    try {
+      const d = JSON.parse(r.result);
+      if (!Array.isArray(d)) throw 0;
+      const rows = d.map(x => ({ subject: x.subject || "", system: x.system || "", stem: x.stem, options: x.options, answer: x.answer, explanation: x.explanation || "", objective: x.objective || "", stem_image: x.stem_image || "", explanation_image: x.explanation_image || "" }));
+      const { error } = await db.from("questions").insert(rows);
+      if (error) return alert("Import failed: " + error.message);
+      editing = null; load();
+    } catch (x) { alert("That file isn’t a valid questions JSON."); }
+  };
+  r.readAsText(e.target.files[0]);
+}
+load();
+</script>
+</body>
+</html>
