@@ -6,8 +6,8 @@
   <title>Online MCQ Practice Quiz</title>
   <style>
     * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
-    body { background: #f4f6f9; color: #1f2937; display: flex; justify-content: center; padding: 20px; margin: 0; }
-    .quiz-card { background: #ffffff; max-width: 650px; width: 100%; border-radius: 12px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    body { background: #f4f6f9; color: #1f2937; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
+    .quiz-card { background: #ffffff; max-width: 700px; width: 100%; border-radius: 12px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
     .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; padding-bottom: 14px; margin-bottom: 20px; }
     .badge { background: #e0e7ff; color: #3730a3; padding: 5px 12px; border-radius: 20px; font-size: 14px; font-weight: 600; }
     h2 { font-size: 20px; margin: 0 0 20px 0; line-height: 1.4; }
@@ -19,16 +19,29 @@
     .option-btn:disabled { cursor: default; }
     .explanation { margin-top: 16px; padding: 12px 16px; background: #f8fafc; border-left: 4px solid #6366f1; border-radius: 4px; font-size: 14px; display: none; }
     .footer { margin-top: 24px; display: flex; justify-content: flex-end; }
-    .primary-btn { background: #4f46e5; color: #fff; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; display: none; }
+    .primary-btn { background: #4f46e5; color: #fff; border: none; padding: 12px 20px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; }
     .primary-btn:hover { background: #4338ca; }
+    .secondary-btn { background: #e5e7eb; color: #1f2937; border: none; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+    .danger-btn { background: #fee2e2; color: #b91c1c; border: none; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; }
     .result-box { text-align: center; padding: 20px 0; display: none; }
     .score-circle { font-size: 42px; font-weight: 800; color: #4f46e5; margin: 16px 0; }
+    
+    /* Admin Styles */
+    .admin-trigger { margin-top: 20px; font-size: 13px; color: #6b7280; background: none; border: none; cursor: pointer; text-decoration: underline; }
+    .admin-panel { display: none; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; }
+    .q-item { border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .q-item-text { font-size: 14px; font-weight: 500; }
+    .publish-box { background: #ecfdf5; border: 1px solid #10b981; padding: 16px; border-radius: 8px; margin-top: 20px; }
+    .publish-box p { margin: 0 0 10px 0; font-size: 14px; color: #065f46; }
   </style>
 </head>
 <body>
 
 <div class="quiz-card">
-  <!-- Quiz Screen -->
+  <!-- STUDENT QUIZ SCREEN -->
   <div id="quiz-screen">
     <div class="header">
       <span class="badge" id="progress-text">Question 1 of 3</span>
@@ -38,25 +51,89 @@
     <div class="options" id="options-container"></div>
     <div class="explanation" id="explanation-box"></div>
     <div class="footer">
-      <button class="primary-btn" id="next-btn" onclick="nextQuestion()">Next Question →</button>
+      <button class="primary-btn" id="next-btn" style="display:none;" onclick="nextQuestion()">Next Question →</button>
     </div>
   </div>
 
-  <!-- Final Score Screen -->
+  <!-- FINAL SCORE SCREEN -->
   <div class="result-box" id="result-screen">
     <h2>Quiz Completed!</h2>
     <div class="score-circle" id="final-score">0 / 0</div>
     <p id="result-message"></p>
-    <button class="primary-btn" style="display:inline-block; margin-top:16px;" onclick="restartQuiz()">Restart Quiz</button>
+    <button class="primary-btn" style="margin-top:16px;" onclick="restartQuiz()">Restart Quiz</button>
+  </div>
+
+  <!-- ADMIN INTERFACE -->
+  <div class="admin-panel" id="admin-screen">
+    <div class="header">
+      <h2 style="margin:0;">Admin Question Manager</h2>
+      <button class="secondary-btn" onclick="closeAdmin()">← Back to Quiz</button>
+    </div>
+
+    <!-- Add / Edit Form -->
+    <div style="background:#f9fafb; padding:16px; border-radius:8px; margin-bottom:20px; border:1px solid #e5e7eb;">
+      <h3 style="margin:0 0 12px 0; font-size:16px;" id="form-title">Add New Question</h3>
+      <input type="hidden" id="edit-index" value="-1" />
+      <div class="form-group">
+        <label>Question Text</label>
+        <input type="text" id="in-q" placeholder="Enter your question here..." />
+      </div>
+      <div class="form-group">
+        <label>Option 1 (A)</label>
+        <input type="text" id="in-opt0" placeholder="First choice" />
+      </div>
+      <div class="form-group">
+        <label>Option 2 (B)</label>
+        <input type="text" id="in-opt1" placeholder="Second choice" />
+      </div>
+      <div class="form-group">
+        <label>Option 3 (C)</label>
+        <input type="text" id="in-opt2" placeholder="Third choice" />
+      </div>
+      <div class="form-group">
+        <label>Option 4 (D)</label>
+        <input type="text" id="in-opt3" placeholder="Fourth choice" />
+      </div>
+      <div class="form-group">
+        <label>Correct Answer</label>
+        <select id="in-ans">
+          <option value="0">Option 1 (A)</option>
+          <option value="1">Option 2 (B)</option>
+          <option value="2">Option 3 (C)</option>
+          <option value="3">Option 4 (D)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Explanation (Optional)</label>
+        <input type="text" id="in-exp" placeholder="Why is this answer correct?" />
+      </div>
+      <button class="primary-btn" onclick="saveQuestion()">Save Question</button>
+      <button class="secondary-btn" id="cancel-edit-btn" style="display:none; margin-left:8px;" onclick="resetForm()">Cancel Edit</button>
+    </div>
+
+    <!-- Existing Questions List -->
+    <h3 style="font-size:16px; margin-bottom:10px;">Current Questions (<span id="q-count">0</span>)</h3>
+    <div id="admin-q-list"></div>
+
+    <!-- Publish / Export Box -->
+    <div class="publish-box">
+      <p><strong>How to make changes live for everyone:</strong><br>
+      Click the button below to copy the updated website code, then paste it into your <code>index.html</code> file on GitHub.</p>
+      <button class="primary-btn" style="background:#059669;" onclick="copyUpdatedHTML()">📋 Copy Updated Website Code</button>
+      <span id="copy-status" style="margin-left:10px; font-weight:600; color:#065f46; font-size:14px;"></span>
+    </div>
   </div>
 </div>
 
-<script>
+<button class="admin-trigger" onclick="openAdmin()">Admin Login</button>
+
+<script id="quiz-data-script">
   // ==========================================
-  // EDIT YOUR QUESTIONS HERE
-  // answer: 0 = 1st option, 1 = 2nd, 2 = 3rd, 3 = 4th
+  // ADMIN PASSWORD (Change "admin123" to your own password)
   // ==========================================
-  const quizData = [
+  const ADMIN_PASSWORD = "admin123";
+
+  let quizData = [
     {
       question: "What is the powerhouse of the cell?",
       options: ["Nucleus", "Mitochondria", "Ribosome", "Golgi apparatus"],
@@ -81,7 +158,9 @@
       explanation: "HTML (Hyper Text Markup Language) is the standard markup language for web pages."
     }
   ];
+</script>
 
+<script>
   let currentIndex = 0;
   let score = 0;
 
@@ -93,6 +172,11 @@
   const scoreText = document.getElementById("score-text");
 
   function loadQuestion() {
+    if (quizData.length === 0) {
+      questionEl.textContent = "No questions available yet.";
+      optionsEl.innerHTML = "";
+      return;
+    }
     const current = quizData[currentIndex];
     progressText.textContent = `Question ${currentIndex + 1} of ${quizData.length}`;
     questionEl.textContent = current.question;
@@ -127,43 +211,3 @@
 
     if (current.explanation) {
       explanationEl.innerHTML = `<strong>Explanation:</strong> ${current.explanation}`;
-      explanationEl.style.display = "block";
-    }
-
-    nextBtn.textContent = currentIndex === quizData.length - 1 ? "See Results" : "Next Question →";
-    nextBtn.style.display = "inline-block";
-  }
-
-  function nextQuestion() {
-    currentIndex++;
-    if (currentIndex < quizData.length) {
-      loadQuestion();
-    } else {
-      showResults();
-    }
-  }
-
-  function showResults() {
-    document.getElementById("quiz-screen").style.display = "none";
-    const resultScreen = document.getElementById("result-screen");
-    resultScreen.style.display = "block";
-    document.getElementById("final-score").textContent = `${score} / ${quizData.length}`;
-    
-    const percent = Math.round((score / quizData.length) * 100);
-    document.getElementById("result-message").textContent = `You scored ${percent}%. Great job practicing!`;
-  }
-
-  function restartQuiz() {
-    currentIndex = 0;
-    score = 0;
-    scoreText.textContent = "Score: 0";
-    document.getElementById("result-screen").style.display = "none";
-    document.getElementById("quiz-screen").style.display = "block";
-    loadQuestion();
-  }
-
-  loadQuestion();
-</script>
-
-</body>
-</html>
